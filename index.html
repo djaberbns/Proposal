@@ -1,129 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Surprise</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #ffecf2;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .hidden {
-            display: none;
-        }
-        .reveal {
-            font-size: 24px;
-            background-color: #ff69b4;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .reveal:hover {
-            transform: scale(1.1);
-        }
-        .heart {
-            position: absolute;
-            font-size: 30px;
-            color: red;
-            animation: floatUp 3s linear infinite;
-        }
-        @keyframes floatUp {
-            from { transform: translateY(100vh); opacity: 1; }
-            to { transform: translateY(-10vh); opacity: 0; }
-        }
-        .no-button {
-            font-size: 24px;
-            background-color: #ccc;
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s ease-in-out;
-        }
-        .no-button:hover {
-            position: absolute;
-            left: calc(10% + 80% * Math.random());
-            top: calc(10% + 80% * Math.random());
-        }
-    </style>
-</head>
-<body>
-    <audio id="bgMusic" loop>
-        <source src="romantic-music.mp3" type="audio/mpeg">
-    </audio>
-    
-    <div class="container" id="welcomeScreen">
-        <h1>Welcome, Nono! ❤️</h1>
-        <p>Tap to start your special journey...</p>
-        <button class="reveal" onclick="startJourney()">Start</button>
-    </div>
-    
-    <div class="container hidden" id="gameScreen">
-        <h2>Collect the Hearts! ❤️</h2>
-        <p>Tap the hearts to fill the love meter.</p>
-        <p>Progress: <span id="score">0</span>/5</p>
-        <div id="hearts"></div>
-    </div>
-    
-    <div class="container hidden" id="finalScreen">
-        <h1>Nono, you are my forever! 💍❤️</h1>
-        <button class="reveal" onclick="celebrate()">YES! 💍</button>
-        <button class="no-button" id="noButton">No 🙅‍♀️</button>
-    </div>
-    
-    <script>
-        function startJourney() {
-            document.getElementById("bgMusic").play();
-            document.getElementById("welcomeScreen").classList.add("hidden");
-            document.getElementById("gameScreen").classList.remove("hidden");
-            spawnHearts();
-        }
-        
-        let score = 0;
-        function spawnHearts() {
-            let heartsContainer = document.getElementById("hearts");
-            heartsContainer.innerHTML = "";
-            for (let i = 0; i < 5; i++) {
-                let heart = document.createElement("div");
-                heart.innerHTML = "❤️";
-                heart.classList.add("heart");
-                heart.style.left = Math.random() * 90 + "%";
-                heart.onclick = function() {
-                    heart.remove();
-                    score++;
-                    document.getElementById("score").textContent = score;
-                    if (score === 5) {
-                        document.getElementById("gameScreen").classList.add("hidden");
-                        document.getElementById("finalScreen").classList.remove("hidden");
-                    }
-                };
-                document.body.appendChild(heart);
+function spawnHearts() {
+    let heartsContainer = document.getElementById("hearts");
+    heartsContainer.innerHTML = "";
+    heartsContainer.style.position = "relative"; // Ensures proper placement
+
+    for (let i = 0; i < 5; i++) {
+        let heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.classList.add("heart");
+
+        // Set random position inside container
+        heart.style.position = "absolute";
+        heart.style.left = Math.random() * 90 + "%";
+        heart.style.top = Math.random() * 80 + "%"; 
+
+        heart.onclick = function () {
+            heart.remove();
+            score++;
+            document.getElementById("score").textContent = score;
+            if (score === 5) {
+                document.getElementById("gameScreen").classList.add("hidden");
+                document.getElementById("finalScreen").classList.remove("hidden");
             }
-        }
-        
-        function celebrate() {
-            alert("Congratulations, Nono! ❤️💍🎉");
-        }
-    </script>
-</body>
-</html>
+        };
+        heartsContainer.appendChild(heart); // Append to the correct container
+    }
+}
